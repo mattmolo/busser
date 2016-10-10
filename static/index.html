@@ -1,0 +1,113 @@
+ <!DOCTYPE html>
+<html>
+<head>
+    <title>1B Bus Stop Times</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <meta name="theme-color" content="#22263b">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300" rel="stylesheet">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+    <style type="text/css">
+        *, html, body {
+            padding: 0;
+            margin: 0;
+        }
+        html, body {
+            height: 100%;
+        }
+        p {
+            font-size: 96px;
+            text-align: center;
+            font-family: 'Source Sans Pro', sans-serif;
+            font-weight: 300;
+            padding: 20px;
+            color: white;
+            line-height: 90px;
+        }
+        h1 {
+            font-size: 35px;
+            text-align: center;
+            font-family: 'Source Sans Pro', sans-serif;
+            font-weight: 300;
+            padding-top: 50px;
+            padding-bottom: 20px;
+            color: white;
+            line-height: 40px;
+        }
+        body {
+            background-color: #22263b;
+        }
+        .item {
+            width: 50%;
+            margin: 0 auto;
+            height: 100%;
+            float: left;
+        }
+        @media screen and (max-width: 800px){
+            .item {
+                width: 100%;
+            }
+        }
+    </style>
+
+
+
+</head>
+
+<body>
+    <div class="item home">
+        <h1>
+            Salisbury and Rockland
+            <span id="salisbury-notify">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path  fill="#ffffff" d="M14,20A2,2 0 0,1 12,22A2,2 0 0,1 10,20H14M12,2A1,1 0 0,1 13,3V4.08C15.84,4.56 18,7.03 18,10V16L21,19H3L6,16V10C6,7.03 8.16,4.56 11,4.08V3A1,1 0 0,1 12,2Z" /></svg>
+            </span>
+        </h1>
+    </div>
+    <div class="item mcd">
+        <h1>
+            McDonalds on Stadium
+            <span id="mcdonalds-notify">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path  fill="#ffffff" d="M14,20A2,2 0 0,1 12,22A2,2 0 0,1 10,20H14M12,2A1,1 0 0,1 13,3V4.08C15.84,4.56 18,7.03 18,10V16L21,19H3L6,16V10C6,7.03 8.16,4.56 11,4.08V3A1,1 0 0,1 12,2Z" /></svg>
+            </span>
+        </h1>
+    </div>
+
+    <script type="application/javascript">
+        function update1() {
+            $.getJSON('/eta/1817/BUS637NW', function (json) {
+                if (json) {
+                    console.log(json);
+                    $(".time1").remove();
+                    $.each(json.results, function(i, item) {
+                        $(".home").append("<p class='time1'>"+item+"</p>");
+                    });
+                }
+            });
+        }
+        function update2() {
+            $.getJSON('/eta/1817/BUS530S', function (json) {
+                if (json) {
+                    $(".time2").remove();
+                    $.each(json.results, function(i, item) {
+                        $(".mcd").append("<p class='time2'>"+item+"</p>");
+                    });
+                }
+            });
+        }
+        setTimeout(update1, 0)
+        setInterval(update1, 10000)
+        setTimeout(update2, 0)
+        setInterval(update2, 10000)
+
+        $('#salisbury-notify').click(function() {
+            $.post('/eta/1817/BUS637NW/notify')
+        })
+        $('#mcdonalds-notify').click(function() {
+            $.post('/eta/1817/BUS530S/notify')
+        })
+
+    </script>
+</body>
+</html>
