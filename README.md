@@ -14,10 +14,11 @@ export FLASK_APP=busser.py
 python busser.py
 ```
 
+
 To run with docker:
 ```bash
-docker build -t -e "BUSSER_URL_HOST=http://domain.name:4000" -e "BUSSER_API_KEY=3839292.not.a.real.key.383838" busser:latest .
-docker run -d -p 4000:4000 busser
+docker build -t busser:latest .
+docker run -d -e "BUSSER_URL_HOST=http://domain.name:4000" -e "BUSSER_API_KEY=3839292.not.a.real.key.383838" -p 4000:4000 busser
 ```
 
 ## TODO:

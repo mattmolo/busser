@@ -81,7 +81,6 @@
         function update1() {
             $.getJSON('/eta/1817/BUS637NW', function (json) {
                 if (json) {
-                    console.log(json);
                     $(".time1").remove();
                     $.each(json.results, function(i, item) {
                         $(".home").append("<p class='time1'>"+item+"</p>");

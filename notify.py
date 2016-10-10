@@ -1,6 +1,6 @@
 from pushbullet import Pushbullet
-from api_key import api_key
+import os
 
-pb = Pushbullet(api_key)
+pb = Pushbullet(os.getenv('BUSSER_API_KEY', ''))
 def notify(message, url):
     pb.push_link(message, url)
