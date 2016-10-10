@@ -1,6 +1,7 @@
 import threading
 import requests
 import time
+import os
 from notify import notify
 
 class NotifyThread(threading.Thread):
@@ -23,6 +24,10 @@ class NotifyThread(threading.Thread):
         five_or_below = False # Second notification at 5 minutes out
         one_or_below = False # Third notification at 1 minute out
 
+        # Get the host url from env vars
+        stop_notification_url = "%s/notification/stop" % (
+            os.getenv('BUSSER_HOST_URL', 'http://localhost'))
+
         while self.running and time.time() < self.expire_time:
             print "Checking ETAs"
 
@@ -41,8 +46,7 @@ class NotifyThread(threading.Thread):
             # When it's one minute out, notify us!
             if etas[0] <= 1:
                 one_or_below = True
-                notify("%d minute left, bus is coming!" % etas[0],
-                       "http://mattmolo.com/1b/")
+                notify("%d minute left, bus is coming!" % etas[0], stop_notification_url)
 
                 # Stop running the thread
                 self.running = False
@@ -50,14 +54,12 @@ class NotifyThread(threading.Thread):
             # When it's five minutes out, notify us!
             elif not five_or_below and etas[0] <= 5:
                 five_or_below = True
-                notify("%d minutes left, leave now!" % etas[0],
-                       "http://mattmolo.com/1b/")
+                notify("%d minutes left, leave now!" % etas[0], stop_notification_url)
                 self.expire_time = time.time() + 10*60
 
             # Otherwise, notify that we are tracking
             elif not initial_notify:
-                notify("Tracking Bus: %d minutes left" % etas[0],
-                       "http://mattmolo.com/1b/")
+                notify("Tracking Bus: %d minutes left" % etas[0], stop_notification_url)
 
             initial_notify = True
 

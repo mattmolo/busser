@@ -44,7 +44,7 @@ def get_stop(route_request, stop_request):
 
 @app.route('/eta/<route_request>/<stop_request>/notify', methods=["POST"])
 @cross_origin()
-def post_notify_stop(route_request, stop_request):
+def post_notify_eta(route_request, stop_request):
     try:
         global notify_t
 
@@ -60,6 +60,21 @@ def post_notify_stop(route_request, stop_request):
         return jsonify(success=False), 500
 
     return jsonify(success=True)
+
+@app.route('/notification/stop')
+@cross_origin()
+def get_stop_notification():
+    try:
+        global notify_t
+
+        # Stop other notification thread if it's running
+        if notify_t is not None:
+            notify_t.running = False
+            notify_t.join()
+    except:
+        return "Something went wrong :/", 500
+
+    return "Notification has been removed."
 
 @app.route('/routes/')
 @cross_origin()
