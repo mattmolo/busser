@@ -7,6 +7,12 @@ Requires `api_key.py` which contains a PushBullet API Key like this:
 api_key = '8438d8f8fg8_not_real_key_84338388'
 ```
 
+To run:
+```bash
+docker build -t busser:latest .
+docker run -d -p 4000:4000 busser
+```
+
 ## TODO:
 - [ ] [Make this better async with twisted](http://tavendo.com/blog/post/going-asynchronous-from-flask-to-twisted-klein/)
 - [ ] Kill all threads when it dies
